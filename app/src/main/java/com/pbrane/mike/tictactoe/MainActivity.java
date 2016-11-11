@@ -146,14 +146,13 @@ public class MainActivity extends Activity {
 		ttt.setAIsTurn(false);
 		return result;
 	}
-
 	private void displayInGameMessage(int cell, String symbol, int node, boolean singlePlayer) {
 		textView.setText("");
 		textView.append(Html.fromHtml("<font color=#00bfff><b>" + String.format("Player %s's turn", symbol) + "</b></font><br>"));
 		textView.append(Html.fromHtml("<font color=#ffff00><b>" + String.format("Cell: %d chosen", cell) + "</b></font><br>"));
-		textView.append(Html.fromHtml("<font color=#ff0000><b>" + String.format("Nodes traversed: %d", node) + "</b></font><br>"));
 		textView.append(Html.fromHtml("<font color=#00ff00><b>" + String.format("Scores:  X: %d   O: %d", ttt.getScore()[0], ttt.getScore()[1]) + "</b></font><br>"));
 		textView.append(Html.fromHtml("<font color=#0000ff><b>" + String.format("Two player mode is %s", singlePlayer ? "disabled" : "enabled") + "</b></font><br>"));
+		textView.append(Html.fromHtml("<font color=#ff0000><b>" + String.format("Nodes traversed: %d", node) + "</b></font><br>"));
 	}
 
 }
