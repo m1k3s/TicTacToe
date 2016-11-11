@@ -105,8 +105,9 @@ public class MainActivity extends Activity {
 		if (ttt.checkForWinner()) {
 			ttt.showWinner();
 			// display message about the winner
-			setMessage(ttt.getTheWinnersName() + " has won the game!");
-			appendMessage("You're Stupid " + ttt.getTheLosersName() + "!");
+			textView.setText("");
+			textView.append(Html.fromHtml("<font color=#0505ff><b>" + String.format("%s has won the game!", ttt.getTheWinnersName()) + "</b></font><br>"));
+			textView.append(Html.fromHtml("<font color=#00ff00><b>" + String.format("You're STUPID %s!", ttt.getTheLosersName()) + "</b></font><br>"));
 			tictactoeView.postInvalidate();
 			return true;
 		}
@@ -117,8 +118,9 @@ public class MainActivity extends Activity {
 			if (ttt.checkForWinner()) {
 				ttt.showWinner();
 				// display message about the winner
-				setMessage(ttt.getTheWinnersName() + " has won the game!");
-				appendMessage("You're a LOSER " + ttt.getTheLosersName() + "!");
+				textView.setText("");
+				textView.append(Html.fromHtml("<font color=#0505ff><b>" + String.format("%s has won the game!", ttt.getTheWinnersName()) + "</b></font><br>"));
+				textView.append(Html.fromHtml("<font color=#00ff00><b>" + String.format("You're a LOSER %s!", ttt.getTheLosersName()) + "</b></font><br>"));
 				tictactoeView.postInvalidate();
 				return true;
 			} else {
@@ -128,7 +130,8 @@ public class MainActivity extends Activity {
 		// check if this was the last move, otherwise keep playing
 		if (!ttt.hasMovesLeft()) {
 			// it's a tie game, display message about the two losers
-			setMessage("You're both LOSERS!");
+			textView.setText("");
+			textView.append(Html.fromHtml("<font color=#ff0505><b>You're both LOSERS!</b></font><br>"));
 			tictactoeView.postInvalidate();
 			return true;
 		}
@@ -144,27 +147,13 @@ public class MainActivity extends Activity {
 		return result;
 	}
 
-	private void setMessage(String msg) {
-		textView.setText("");
-		textView.setText(String.format("%s\n", msg));
-	}
-
-	private void appendMessage(String msg) {
-		textView.append(String.format("%s\n", msg));
-	}
-
 	private void displayInGameMessage(int cell, String symbol, int node, boolean singlePlayer) {
 		textView.setText("");
-		textView.append(Html.fromHtml("<font color=#00BFFF><b>" + String.format("Player %s's turn", symbol) + "</b></font><br>"));
-//		setMessage("Player " + symbol + "'s turn\n");
-		if (cell == -1) {
-			appendMessage("Cell: ");
-		} else {
-			appendMessage("Cell: " + cell + " chosen");
-		}
-		appendMessage("Nodes traversed: " + node);
-		appendMessage("Scores:   X: " + ttt.getScore()[0] + "  " + "O: " + ttt.getScore()[1]);
-		appendMessage("Two player mode is " + (singlePlayer ? "disabled" : "enabled"));
+		textView.append(Html.fromHtml("<font color=#00bfff><b>" + String.format("Player %s's turn", symbol) + "</b></font><br>"));
+		textView.append(Html.fromHtml("<font color=#ffff00><b>" + String.format("Cell: %d chosen", cell) + "</b></font><br>"));
+		textView.append(Html.fromHtml("<font color=#ff0000><b>" + String.format("Nodes traversed: %d", node) + "</b></font><br>"));
+		textView.append(Html.fromHtml("<font color=#00ff00><b>" + String.format("Scores:  X: %d   O: %d", ttt.getScore()[0], ttt.getScore()[1]) + "</b></font><br>"));
+		textView.append(Html.fromHtml("<font color=#0000ff><b>" + String.format("Two player mode is %s", singlePlayer ? "disabled" : "enabled") + "</b></font><br>"));
 	}
 
 }
