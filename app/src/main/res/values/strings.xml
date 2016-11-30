@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">Tic Tac Toe</string>
+    <string name="single_player">Single Player</string>
+    <string name="two_player">Two Player</string>
+    <string name="reset_game">New Game</string>
 </resources>

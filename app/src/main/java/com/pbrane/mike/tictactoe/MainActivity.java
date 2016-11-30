@@ -1,6 +1,9 @@
 package com.pbrane.mike.tictactoe;
 
 import android.app.Activity;
+//import android.app.AlertDialog;
+import android.content.Context;
+//import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -21,6 +24,10 @@ public class MainActivity extends Activity {
 	private TicTacToe ttt;
 	private TextView textView;
 	private boolean singlePlayerMode;
+//	private boolean networkPlayerMode;
+	final Context context = this;
+	private Button modeButton;
+	private Button resetButton;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -45,10 +52,10 @@ public class MainActivity extends Activity {
 		textView.setHeight(size.x);
 
 		singlePlayerMode = true; // default to playing the AI
+//		networkPlayerMode = false;
 
 		ttt = new TicTacToe(canvas, size);
 		ttt.drawBoard();
-		displayInGameMessage(-1, ttt.getCurrentPlayerSymbol(), ttt.getNodeLevel(), singlePlayerMode);
 
 		// this method happens when it is the players turn
 		tictactoeView.setOnTouchListener(new View.OnTouchListener() {
@@ -56,6 +63,9 @@ public class MainActivity extends Activity {
 			public boolean onTouch(View view, MotionEvent event) {
 				// check for winner or game over or AI's turn
 				if (ttt.checkForWinner() || !ttt.hasMovesLeft() || ttt.isAIsTurn()) {
+					if (!ttt.hasMovesLeft()) {
+						resetButton.setEnabled(true);
+					}
 					return false;
 				}
 				switch (event.getAction()) {
@@ -66,29 +76,64 @@ public class MainActivity extends Activity {
 			}
 		});
 
-		final Button resetButton = (Button)findViewById(R.id.reset_button);
+		resetButton = (Button)findViewById(R.id.reset_button);
 		resetButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
 				canvas.drawColor(Color.BLACK);
 				ttt.resetGame();
 				ttt.drawBoard();
+				resetButton.setEnabled(false);
 				displayInGameMessage(-1, ttt.getCurrentPlayerSymbol(), ttt.getNodeLevel(), singlePlayerMode);
 				tictactoeView.postInvalidate();
 			}
 		});
 
-		final Button modeButton = (Button)findViewById(R.id.mode_button);
+		modeButton = (Button)findViewById(R.id.mode_button);
 		modeButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
 				singlePlayerMode = !singlePlayerMode;
-				modeButton.setText(singlePlayerMode ? "Two Player" : "Single Player");
+				modeButton.setText(singlePlayerMode ? R.string.two_player : R.string.single_player);
 				displayInGameMessage(-1, ttt.getCurrentPlayerSymbol(), ttt.getNodeLevel(), singlePlayerMode);
 				tictactoeView.postInvalidate();
 			}
 		});
+
+//		createStartupDialog();
+
+		displayInGameMessage(-1, ttt.getCurrentPlayerSymbol(), ttt.getNodeLevel(), singlePlayerMode);
+		modeButton.setText(singlePlayerMode ? R.string.two_player : R.string.single_player);
+		modeButton.postInvalidate();
+		resetButton.setEnabled(false);
 	}
+
+//	private void createStartupDialog() {
+//		AlertDialog.Builder builder = new AlertDialog.Builder(context);
+//		builder.setMessage("Choose a network game or single player").setTitle("Available Games");
+//		builder.setPositiveButton("Network Game", new DialogInterface.OnClickListener() {
+//			@Override
+//			public void onClick(DialogInterface dialog, int id) {
+//				networkPlayerMode = true;
+//				singlePlayerMode = false;
+//				displayInGameMessage(-1, ttt.getCurrentPlayerSymbol(), ttt.getNodeLevel(), singlePlayerMode);
+//				modeButton.setText(singlePlayerMode ? R.string.two_player : R.string.single_player);
+//				// get the chosen game from the list
+//			}
+//		});
+//
+//		builder.setNegativeButton(R.string.single_player, new DialogInterface.OnClickListener() {
+//			@Override
+//			public void onClick(DialogInterface dialogInterface, int i) {
+//				networkPlayerMode = false;
+//				singlePlayerMode = true;
+//				displayInGameMessage(-1, ttt.getCurrentPlayerSymbol(), ttt.getNodeLevel(), singlePlayerMode);
+//				modeButton.setText(singlePlayerMode ? R.string.two_player : R.string.single_player);
+//			}
+//		});
+//		AlertDialog dialog = builder.create();
+//		dialog.show();
+//	}
 
 	private boolean updateGameState(int x, int y) {
 		int cell = ttt.findCell(x, y);
@@ -109,6 +154,7 @@ public class MainActivity extends Activity {
 			textView.append(Html.fromHtml("<font color=#0505ff><b>" + String.format("%s has won the game!", ttt.getTheWinnersName()) + "</b></font><br>"));
 			textView.append(Html.fromHtml("<font color=#00ff00><b>" + String.format("You're STUPID %s!", ttt.getTheLosersName()) + "</b></font><br>"));
 			tictactoeView.postInvalidate();
+			resetButton.setEnabled(true);
 			return true;
 		}
 		// toggle player to the computer, and call method
@@ -122,6 +168,7 @@ public class MainActivity extends Activity {
 				textView.append(Html.fromHtml("<font color=#0505ff><b>" + String.format("%s has won the game!", ttt.getTheWinnersName()) + "</b></font><br>"));
 				textView.append(Html.fromHtml("<font color=#00ff00><b>" + String.format("You're a LOSER %s!", ttt.getTheLosersName()) + "</b></font><br>"));
 				tictactoeView.postInvalidate();
+				resetButton.setEnabled(true);
 				return true;
 			} else {
 				ttt.toggleCurrentPlayer();
@@ -133,6 +180,7 @@ public class MainActivity extends Activity {
 			textView.setText("");
 			textView.append(Html.fromHtml("<font color=#ff0505><b>You're both LOSERS!</b></font><br>"));
 			tictactoeView.postInvalidate();
+			resetButton.setEnabled(true);
 			return true;
 		}
 		// set new player messages

@@ -34,21 +34,19 @@
         android:layout_alignParentBottom="true" >
 
         <Button
-            android:text="Two Player"
+            android:text="@string/two_player"
             android:layout_weight="1"
             android:layout_width="0dp"
-            android:layout_alignParentLeft="true"
             android:layout_height="wrap_content"
             android:background="#696969"
             android:id="@+id/mode_button"
             style="@style/Base.Widget.AppCompat.Button.Borderless" />
 
         <Button
-            android:text="New Game"
+            android:text="@string/reset_game"
             android:layout_weight="1"
             android:layout_width="0dp"
-            android:layout_marginLeft="16dp"
-            android:layout_alignParentRight="true"
+            android:layout_marginStart="16dp"
             android:layout_height="wrap_content"
             android:background="#696969"
             android:id="@+id/reset_button"
