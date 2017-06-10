@@ -75,6 +75,7 @@ public class TicTacToe {
 		theWinner = cellType.TTT_TIE.value;
 		winning = new int[3];
 		AIsTurn = false; // player goes first
+		nodeLevel = 0;
 
 		layout.add(new Point(0, 0));
 		layout.add(new Point(cell_size, 0));
@@ -258,6 +259,7 @@ public class TicTacToe {
 
 	public boolean AIsMove(int x, int y) {
 		if (AIsTurn && !checkForWinner() && hasMovesLeft()) {
+			nodeLevel = 0;
 			// maybe have a delay here?
 //			try { Thread.sleep(250); } catch (Exception e) { System.out.println(e); }
 			currentCell = findBestMove(board);
@@ -273,7 +275,6 @@ public class TicTacToe {
 		int depth = 0;
 		int alpha = Integer.MIN_VALUE;
 		int beta = Integer.MAX_VALUE;
-		nodeLevel = 0;
 
 		for (int cell = 0; cell < nCells; cell++) {
 			if (board[cell] == cellType.TTT_EMPTY.value) {
